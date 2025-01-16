@@ -1458,11 +1458,11 @@ AI_Smart_Protect:
 	bit SUBSTATUS_CHARGED, a
 	jr nz, .encourage
 	bit SUBSTATUS_ROLLOUT, a
-	jr z, .discourage
+	jr nz, .discourage
 
 	ld a, [wBattleMonStatus]
 	bit TOX, a
-	jr nz, .encourage
+	jr nz, .greatly_encourage
 	ld a, [wPlayerSubStatus4]
 	bit SUBSTATUS_LEECH_SEED, a
 	jr nz, .encourage
@@ -1473,6 +1473,13 @@ AI_Smart_Protect:
 	ld a, [wPlayerRolloutCount]
 	cp 3
 	jr c, .discourage
+
+.greatly_encourage
+	call AI_80_20
+	ret c
+	dec [hl]
+	dec [hl]
+	ret
 
 .encourage
 	call AI_80_20
